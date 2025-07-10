@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dexps Solutions - Innovative mobile gaming and app development company. Explore our games on Google Play and Amazon Appstore.">
+    <meta name="keywords" content="Dexps Solutions, mobile games, app development, Google Play, Amazon Appstore">
+    <meta name="author" content="Dexps Solutions">
+    <title>Dexps Solutions</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root {
+            --primary: #007bff;
+            --secondary: #6c757d;
+            --background: #f8f9fa;
+            --text-dark: #212529;
+            --text-light: #fff;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background);
+            color: var(--text-dark);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section with Canvas */
+        #hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .hero-content {
+            z-index: 1;
+            padding: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(90deg, #007bff, #0056b3);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-light) !important;
+            transition: color 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: #ffd700 !important;
+            font-weight: bold;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 60px 0;
+        }
+
+        .stats-heading {
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: var(--primary);
+        }
+
+        .stat-box {
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            background: var(--text-light);
+            transition: transform 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--secondary);
+        }
+
+        /* Game Cards */
+        .game-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s;
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-card:hover .game-overlay {
+            opacity: 1;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .game-btn img {
+            width: 120px;
+        }
+
+        /* Team Slider */
+        .slider {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            flex: 0 0 25%;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .slide img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+        }
+
+        .slide-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 10px;
+            color: var(--primary);
+        }
+
+        .slide-designation {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: var(--text-light);
+            padding: 10px 15px;
+            cursor: pointer;
+            z-index: 1;
+            font-size: 1.5rem;
+            border-radius: 50%;
+        }
+
+        .prev {
+            left: -30px;
+        }
+
+        .next {
+            right: -30px;
+        }
+
+        /* Services Section */
+        .services-item {
+            background: var(--text-light);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .services-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .services-content-icon i {
+            font-size: 4rem;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(90deg, #0056b3, #007bff);
+            color: var(--text-light);
+            padding: 40px 0;
+        }
+
+        footer a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .slide {
+                flex: 0 0 33.33%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .slide {
+                flex: 0 0 50%;
+            }
+
+            .prev, .next {
+                padding: 8px 12px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .slide {
+                flex: 0 0 100%;
+            }
+
+            .game-card img {
+                height: 200px;
+            }
+
+            .game-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#" style="color: var(--text-light);">
+                <img src="https://via.placeholder.com/50" alt="Dexps Solutions Logo" style="width: 50px;">
+                Dexps Solutions
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#amazon">Amazon</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#playstore">Play Store</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#privacy">Privacy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Canvas -->
+    <section id="hero">
+        <canvas id="hero-canvas"></canvas>
+        <div class="hero-content">
+            <h1>Welcome to Dexps Solutions</h1>
+            <p>Creating innovative mobile games and apps for global audiences.</p>
+            <a href="#home" class="btn btn-primary btn-lg">Explore More</a>
+        </div>
+    </section>
+
+    <main>
+        <div class="tab-content">
+            <!-- Home Page -->
+            <div id="home" class="container tab-pane active">
+                <!-- Our Products -->
+                <section class="container py-5">
+                    <div class="text-center mb-5">
+                        <h1 class="stats-heading display-4">Our Products</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 text-center mb-4">
+                            <img src="https://via.placeholder.com/200" class="img-fluid" alt="Play Store Product">
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <h3>Play Store</h3>
+                            <p>Explore our collection of exciting games available on Google Play Store.</p>
+                            <a href="https://play.google.com/store/apps/developer?id=Dexps+Solutions" target="_blank" class="btn btn-primary">Show more...</a>
+                        </div>
+                        <div class="col-md-3 text-center mb-4">
+                            <img src="https://via.placeholder.com/200" class="img-fluid" alt="Amazon Product">
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <h3>Amazon</h3>
+                            <p>Discover our apps and games on the Amazon Appstore.</p>
+                            <a href="https://www.amazon.com/s?i=mobile-apps&rh=p_4%3ADexps+Solutions" target="_blank" class="btn btn-primary">Show more...</a>
+                        </div>
+                    </div>
+                </section>
+                <hr>
+
+                <!-- Our Mission -->
+                <section class="container py-5">
+                    <h2 class="text-center stats-heading display-4">Our Mission</h2>
+                    <p>
+                        At Dexps Solutions, our mission is to create engaging and innovative mobile experiences that captivate users worldwide. We strive to blend creativity with cutting-edge technology to deliver games and apps that are both fun and impactful.
+                    </p>
+                </section>
+                <hr>
+
+                <!-- What We Do -->
+                <section class="container-fluid services py-5 mb-5">
+                    <div class="container">
+                        <div class="text-center pb-5">
+                            <h1 class="stats-heading display-4">What We Do</h1>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-4">
+                                <div class="services-item">
+                                    <div class="p-4 text-center services-content">
+                                        <div class="services-content-icon">
+                                            <i class="fa fa-code fa-4x mb-4"></i>
+                                            <h4 class="mb-3">Game UI/UX</h4>
+                                            <p class="mb-4">Designing intuitive and visually appealing user interfaces for immersive gaming experiences.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="services-item">
+                                    <div class="p-4 text-center services-content">
+                                        <div class="services-content-icon">
+                                            <i class="fa fa-file-code fa-4x mb-4"></i>
+                                            <h4 class="mb-3">Development</h4>
+                                            <p class="mb-4">Building robust and scalable mobile applications using the latest technologies.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="services-item">
+                                    <div class="p-4 text-center services-content">
+                                        <div class="services-content-icon">
+                                            <i class="fa fa-external-link-alt fa-4x mb-4"></i>
+                                            <h4 class="mb-3">ASO</h4>
+                                            <p class="mb-4">Optimizing app store presence to increase visibility and downloads.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="services-item">
+                                    <div class="p-4 text-center services-content">
+                                        <div class="services-content-icon">
+                                            <i class="fas fa-user-secret fa-4x mb-4"></i>
+                                            <h4 class="mb-3">Marketing</h4>
+                                            <p class="mb-4">Crafting strategic campaigns to promote our apps and engage users.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="services-item">
+                                    <div class="p-4 text-center services-content">
+                                        <div class="services-content-icon">
+                                            <i class="fa fa-envelope-open fa-4x mb-4"></i>
+                                            <h4 class="mb-3">Graphic Design</h4>
+                                            <p class="mb-4">Creating stunning visuals and graphics for games and apps.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="services-item">
+                                    <div class="p-4 text-center services-content">
+                                        <div class="services-content-icon">
+                                            <i class="fas fa-laptop fa-4x mb-4"></i>
+                                            <h4 class="mb-3">Game Level Design</h4>
+                                            <p class="mb-4">Crafting challenging and engaging levels for unforgettable gaming experiences.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <hr>
+
+                <!-- Our Achievements -->
+                <section class="stats-section">
+                    <div class="container text-center">
+                        <h2 class="stats-heading display-4">Our Achievements</h2>
+                        <div class="row gy-4">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="stat-box">
+                                    <div class="stat-number">8+ Years</div>
+                                    <div class="stat-label">Work Experience</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="stat-box">
+                                    <div class="stat-number">3B+</div>
+                                    <div class="stat-label">App Downloads</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="stat-box">
+                                    <div class="stat-number">1B+</div>
+                                    <div class="stat-label">Monthly Active Users</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Our People -->
+                <section id="team" class="team section py-5">
+                    <div class="container">
+                        <h2 class="stats-heading display-4 text-center">Our People</h2>
+                        <p class="text-center mb-5">
+                            Our talented team consists of game designers, developers, and sound engineers passionate about casual gaming. We work collaboratively to ensure each game is polished, fun, and addictive.
+                        </p>
+                        <div class="slider mt-3">
+                            <div class="slider-wrapper" id="slider-wrapper">
+                                <div class="slide">
+                                    <img src="https://via.placeholder.com/150" alt="Saad Pervez Khan">
+                                    <div class="slide-name">Saad Pervez Khan</div>
+                                    <div class="slide-designation">CEO & Founder</div>
+                                </div>
+                                <div class="slide">
+                                    <img src="https://via.placeholder.com/150" alt="Raja Faizan Mehmood">
+                                    <div class="slide-name">Raja Faizan Mehmood</div>
+                                    <div class="slide-designation">CEO & Founder</div>
+                                </div>
+                                <div class="slide">
+                                    <img src="https://via.placeholder.com/150" alt="Umar Ali Asgher">
+                                    <div class="slide-name">Umar Ali Asgher</div>
+                                    <div class="slide-designation">HR & Admin Manager</div>
+                                </div>
+                                <div class="slide">
+                                    <img src="https://via.placeholder.com/150" alt="Musa Ali">
+                                    <div class="slide-name">Musa Ali</div>
+                                    <div class="slide-designation">Team Lead</div>
+                                </div>
+                                <div class="slide">
+                                    <img src="https://via.placeholder.com/150" alt="M. Sajjad Khan">
+                                    <div class="slide-name">M. Sajjad Khan</div>
+                                    <div class="slide-designation">Senior Graphic Designer</div>
+                                </div>
+                                <div class="slide">
+                                    <img src="https://via.placeholder.com/150" alt="Wasif Shoaib">
+                                    <div class="slide-name">Wasif Shoaib</div>
+                                    <div class="slide-designation">Senior Unity Developer</div>
+                                </div>
+                                <div class="slide">
+                                    <img src="https://via.placeholder.com/150" alt="M. Abdullah">
+                                    <div class="slide-name">M. Abdullah</div>
+                                    <div class="slide-designation">Graphic Designer</div>
+                                </div>
+                                <div class="slide">
+                                    <img src="https://via.placeholder.com/150" alt="Mudasir Shafique">
+                                    <div class="slide-name">Mudasir Shafique</div>
+                                    <div class="slide-designation">Junior Unity Developer</div>
+                                </div>
+                            </div>
+                            <span class="prev" onclick="moveSlide(-1)">❮</span>
+                            <span class="next" onclick="moveSlide(1)">❯</span>
+                        </div>
+                    </div>
+                </section>
+                <hr>
+
+                <!-- Why Choose Us -->
+                <section class="profile-section text-center py-5">
+                    <div class="container">
+                        <h2 class="stats-heading display-4">Why Choose Us</h2>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-3 col-md-4 profile-card">
+                                <img src="https://via.placeholder.com/150" alt="Quality">
+                                <p class="person-name">Quality</p>
+                                <p class="person-designation">We deliver high-quality games and apps with meticulous attention to detail.</p>
+                            </div>
+                            <div class="col-lg-3 col-md-4 profile-card">
+                                <img src="https://via.placeholder.com/150" alt="Personnel">
+                                <p class="person-name">Personnel</p>
+                                <p class="person-designation">Our skilled team brings expertise and passion to every project.</p>
+                            </div>
+                            <div class="col-lg-3 col-md-4 profile-card">
+                                <img src="https://via.placeholder.com/150" alt="Innovation">
+                                <p class="person-name">Innovation</p>
+                                <p class="person-designation">We push boundaries with creative and cutting-edge solutions.</p>
+                            </div>
+                            <div class="col-lg-3 col-md-4 profile-card">
+                                <img src="https://via.placeholder.com/150" alt="Commitment">
+                                <p class="person-name">Commitment</p>
+                                <p class="person-designation">We are dedicated to exceeding client and user expectations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Amazon Games -->
+            <div id="amazon" class="container tab-pane fade">
+                <div class="container py-5">
+                    <h2 class="stats-heading display-4 text-center mb-5">Amazon Games</h2>
+                    <div class="row">
+                        <div class="col-md-2 mb-4">
+                            <div class="game-card">
+                                <img src="https://via.placeholder.com/200" alt="Ball Hop Neon Tiles">
+                                <div class="game-overlay">
+                                    <div class="game-title">Ball Hop Neon Tiles</div>
+                                    <a href="https://www.amazon.com/dp/B086S9T19Y" target="_blank" class="game-btn">
+                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-4">
+                            <div class="game-card">
+                                <img src="https://via.placeholder.com/200" alt="Magic Neon Switch Color">
+                                <div class="game-overlay">
+                                    <div class="game-title">Magic Neon Switch Color</div>
+                                    <a href="https://www.amazon.com/dp/B08JVFZLVH" target="_blank" class="game-btn">
+                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-4">
+                            <div class="game-card">
+                                <img src="https://via.placeholder.com/200" alt="Stack Ball">
+                                <div class="game-overlay">
+                                    <div class="game-title">Stack Ball - Helix Jump</div>
+                                    <a href="https://www.amazon.com/dp/B08KG3XC65" target="_blank" class="game-btn">
+                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-4">
+                            <div class="game-card">
+                                <img src="https://via.placeholder.com/200" alt="Magic Tiles Hop">
+                                <div class="game-overlay">
+                                    <div class="game-title">Magic Tiles Hop Twister</div>
+                                    <a href="https://www.amazon.com/dp/B08K8R6PLS" target="_blank" class="game-btn">
+                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-4">
+                            <div class="game-card">
+                                <img src="https://via.placeholder.com/200" alt="Line Color">
+                                <div class="game-overlay">
+                                    <div class="game-title">Line Color The Path</div>
+                                    <a href="https://www.amazon.com/dp/B08NPH1V61" target="_blank" class="game-btn">
+                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-4">
+                            <div class="game-card">
+                                <img src="https://via.placeholder.com/200" alt="Parking Jam">
+                                <div class="game-overlay">
+                                    <div class="game-title">Parking Jam 3D</div>
+                                    <a href="https://www.amazon.com/dp/B08KDVDD9V" target="_blank" class="game-btn">
+                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Play Store Games -->
+            <div id="playstore" class="container tab-pane fade">
+                <div class="container py-5">
+                    <h2 class="stats-heading display-4 text-center mb-5">Google Play Games</h2>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="game-card">
+                                <img src="https://via.placeholder.com/300" alt="Path Color Line">
+                                <div class="game-overlay">
+                                    <div class="game-title">Path Color Line 3D</div>
+                                    <a href="https://play.google.com/store/apps/details?id=com.dexpssolutions.linecolor.adventure.colour.draw.go.music" target="_blank" class="game-btn">
+                                        <img src="https://via.placeholder.com/120x40" alt="Google Play">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="game-card">
+                                <img src="https://via.placeholder.com/300" alt="Magic Tiles Twist">
+                                <div class="game-overlay">
+                                    <div class="game-title">Magic Tiles Twist</div>
+                                    <a href="https://play.google.com/store/apps/details?id=com.dexpssolutions.magic.tiles.twist" target="_blank" class="game-btn">
+                                        <img src="https://via.placeholder.com/120x40" alt="Google Play">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="game-card">
+                                <img src="https://via.placeholder.com/300" alt="Dancing Ball Hop">
+                                <div class="game-overlay">
+                                    <div class="game-title">Dancing Ball Hop</div>
+                                    <a href="https://play.google.com/store/apps/details?id=com.dexpssolutions.Jumper.colorhop.tiles.hop.edm.dancing.ball.rush.forever.music.magictiles" target="_blank" class="game-btn">
+                                        <img src="https://via.placeholder.com/120x40" alt="Google Play">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Policy -->
+            <div id="privacy" class="container tab-pane fade">
+                <div class="container py-5">
+                    <h2 class="stats-heading display-4">Privacy Policy</h2>
+                    <p>
+                        At Dexps Solutions, we are committed to protecting your privacy. This policy outlines how we collect, use, and safeguard your information when you use our apps and services. For details, please contact our support team.
+                    </p>
+                </div>
+            </div>
+
+            <!-- About Us -->
+            <div id="about" class="container tab-pane fade">
+                <div class="container py-5">
+                    <h2 class="stats-heading display-4">About Us</h2>
+                    <p>
+                        Dexps Solutions is a leading mobile app development company specializing in casual gaming. With a passionate team and innovative approach, we create apps that entertain millions worldwide.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Contact Us -->
+            <div id="contact" class="container tab-pane fade">
+                <div class="container py-5">
+                    <h2 class="stats-heading display-4 text-center mb-4">Contact Us</h2>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <form id="contact-form">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Your Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Your Email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">Subject</label>
+                                    <input type="text" class="form-control" id="subject" placeholder="Subject" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea class="form-control" id="message" rows="5" placeholder="Your Message" required></textarea>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Send Message</button>
+                                </div>
+                            </form>
+                            <div id="form-message" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>&copy; 2025 Dexps Solutions. All rights reserved.</p>
+            <p>
+                <a href="#privacy">Privacy Policy</a> | 
+                <a href="#contact">Contact Us</a> | 
+                <a href="https://play.google.com/store/apps/developer?id=Dexps+Solutions" target="_blank">Google Play</a> | 
+                <a href="https://www.amazon.com/s?i=mobile-apps&rh=p_4%3ADexps+Solutions" target="_blank">Amazon Appstore</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Canvas Particle Animation
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.size > 0.2) this.size -= 0.1;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((particle, index) => {
+                particle.update();
+                particle.draw();
+
+                if (particle.size <= 0.2) {
+                    particles.splice(index, 1);
+                    particles.push(new Particle());
+                }
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // GSAP Animations
+        gsap.from('.hero-content', { duration: 1.5, y: 50, opacity: 0, ease: 'power3.out' });
+        gsap.from('.stats-heading', {
+            scrollTrigger: '.stats-heading',
+            duration: 1,
+            y: 30,
+            opacity: 0,
+            stagger: 0.2,
+            ease: 'power2.out'
+        });
+        gsap.from('.services-item', {
+            scrollTrigger: '.services-item',
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            stagger: 0.2,
+            ease: 'power2.out'
+        });
+        gsap.from('.stat-box', {
+            scrollTrigger: '.stat-box',
+            duration: 1,
+            scale: 0.8,
+            opacity: 0,
+            stagger: 0.2,
+            ease: 'back.out(1.7)'
+        });
+
+        // Team Slider
+        let slideIndex = 0;
+        const sliderWrapper = document.getElementById('slider-wrapper');
+        const slides = sliderWrapper.children;
+        const totalSlides = slides.length;
+        const slidesToShow = 4;
+
+        function moveSlide(n) {
+            slideIndex += n;
+
+            if (slideIndex >= totalSlides - slidesToShow + 1) {
+                slideIndex = 0;
+            } else if (slideIndex < 0) {
+                slideIndex = totalSlides - slidesToShow;
+            }
+
+            gsap.to(sliderWrapper, {
+                x: -(slideIndex * (slides[0].offsetWidth + 20)),
+                duration: 0.5,
+                ease: 'power2.out'
+            });
+        }
+
+        // Auto Slide
+        setInterval(() => moveSlide(1), 5000);
+
+        // Navigation Active State
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                const target = link.getAttribute('href').substring(1);
+                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                document.getElementById(target).classList.add('active');
+            });
+        });
+
+        // Contact Form Submission
+        document.getElementById('contact-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const messageDiv = document.getElementById('form-message');
+            messageDiv.innerHTML = '<div class="alert alert-success">Message sent successfully! (Demo)</div>';
+            e.target.reset();
+            setTimeout(() => messageDiv.innerHTML = '', 3000);
+        });
+    </script>
+</body>
+</html>

@@ -3,46 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Dexps Solutions - Innovative mobile gaming and app development company. Explore our games on Google Play and Amazon Appstore.">
-    <meta name="keywords" content="Dexps Solutions, mobile games, app development, Google Play, Amazon Appstore">
-    <meta name="author" content="Dexps Solutions">
-    <title>Dexps Solutions</title>
-    <!-- Bootstrap CSS -->
+    <title>Despx Solutions - Gaming Studio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- GSAP CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
         :root {
-            --primary: #007bff;
-            --secondary: #6c757d;
-            --background: #f8f9fa;
-            --text-dark: #212529;
-            --text-light: #fff;
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff3e78;
+            --dark: #0f172a;
+            --light: #f8f9fa;
         }
-
+        
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--background);
-            color: var(--text-dark);
-            position: relative;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
             overflow-x: hidden;
-        }
-
-        /* Hero Section with Canvas */
-        #hero {
             position: relative;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-light);
-            text-align: center;
+            min-height: 100vh;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><rect fill="rgba(37, 117, 252, 0.05)" width="100" height="100"/><path d="M0 0 Q 50 20 100 0 L 100 100 Q 50 80 0 100 Z" fill="rgba(106, 17, 203, 0.05)"/></svg>');
+            background-size: cover;
+            z-index: -1;
+        }
+        
+        .navbar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
+            transition: all 0.5s ease;
+        }
+        
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            padding: 8px 15px !important;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
             overflow: hidden;
         }
-
-        #hero-canvas {
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+            border-radius: 30px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+        }
+        
+        .nav-link:hover::before, .nav-link.active::before {
+            transform: scaleX(1);
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+        
+        .hero-content {
+            z-index: 2;
+            position: relative;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #cbd5e1;
+            max-width: 700px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(37, 117, 252, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 25px rgba(37, 117, 252, 0.6);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .section-padding {
+            padding: 100px 0;
+        }
+        
+        .games-tabs {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-tabs .nav-link {
+            border-radius: 0;
+            padding: 20px 30px !important;
+            font-size: 1.1rem;
+            color: white !important;
+            background: rgba(15, 23, 42, 0.6);
+            border: none !important;
+            margin: 0;
+        }
+        
+        .nav-tabs .nav-item {
+            width: 50%;
+            text-align: center;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .game-card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .game-img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .game-card:hover .game-img {
+            transform: scale(1.05);
+        }
+        
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .game-card:hover .game-overlay {
+            opacity: 1;
+        }
+        
+        .stats-box {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-box:hover {
+            transform: translateY(-10px);
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--secondary);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 15px 0;
+        }
+        
+        .team-member {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .team-img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            margin: 0 auto 20px;
+            transition: all 0.4s ease;
+        }
+        
+        .team-member:hover .team-img {
+            transform: scale(1.1);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(255, 62, 120, 0.3);
+        }
+        
+        footer {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: inline-block;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transform: translateY(-5px);
+        }
+        
+        .canvas-bg {
             position: absolute;
             top: 0;
             left: 0;
@@ -50,857 +330,481 @@
             height: 100%;
             z-index: -1;
         }
-
-        .hero-content {
-            z-index: 1;
-            padding: 20px;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-content p {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-        }
-
-        /* Navigation */
-        .navbar {
-            background: linear-gradient(90deg, #007bff, #0056b3);
-        }
-
-        .navbar-nav .nav-link {
-            color: var(--text-light) !important;
-            transition: color 0.3s;
-        }
-
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link.active {
-            color: #ffd700 !important;
-            font-weight: bold;
-        }
-
-        /* Section Styling */
-        section {
-            padding: 60px 0;
-        }
-
-        .stats-heading {
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-bottom: 40px;
-            color: var(--primary);
-        }
-
-        .stat-box {
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            background: var(--text-light);
-            transition: transform 0.3s;
-        }
-
-        .stat-box:hover {
-            transform: translateY(-10px);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            color: var(--secondary);
-        }
-
-        /* Game Cards */
-        .game-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            transition: transform 0.3s;
-        }
-
-        .game-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: opacity 0.3s;
-        }
-
-        .game-overlay {
+        
+        .particle {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .game-card:hover .game-overlay {
-            opacity: 1;
-        }
-
-        .game-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .game-btn img {
-            width: 120px;
-        }
-
-        /* Team Slider */
-        .slider {
-            position: relative;
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-            overflow: hidden;
-        }
-
-        .slider-wrapper {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .slide {
-            flex: 0 0 25%;
-            text-align: center;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .slide img {
-            width: 150px;
-            height: 150px;
             border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            object-fit: cover;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(106, 17, 203, 0.3);
         }
-
-        .slide-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-top: 10px;
-            color: var(--primary);
-        }
-
-        .slide-designation {
-            font-size: 0.9rem;
-            color: var(--secondary);
-            text-transform: uppercase;
-        }
-
-        .prev, .next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: var(--text-light);
-            padding: 10px 15px;
-            cursor: pointer;
-            z-index: 1;
-            font-size: 1.5rem;
-            border-radius: 50%;
-        }
-
-        .prev {
-            left: -30px;
-        }
-
-        .next {
-            right: -30px;
-        }
-
-        /* Services Section */
-        .services-item {
-            background: var(--text-light);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-
-        .services-item:hover {
-            transform: translateY(-10px);
-        }
-
-        .services-content-icon i {
-            font-size: 4rem;
-            color: var(--primary);
-        }
-
-        /* Footer */
-        footer {
-            background: linear-gradient(90deg, #0056b3, #007bff);
-            color: var(--text-light);
-            padding: 40px 0;
-        }
-
-        footer a {
-            color: #ffd700;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 992px) {
-            .hero-content h1 {
+        
+        @media (max-width: 768px) {
+            .hero-title {
                 font-size: 2.5rem;
             }
-
-            .slide {
-                flex: 0 0 33.33%;
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
             }
-        }
-
-        @media (max-width: 768px) {
-            .hero-content h1 {
+            
+            .section-title {
                 font-size: 2rem;
             }
-
-            .slide {
-                flex: 0 0 50%;
-            }
-
-            .prev, .next {
-                padding: 8px 12px;
-                font-size: 1.2rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .hero-content h1 {
-                font-size: 1.5rem;
-            }
-
-            .hero-content p {
-                font-size: 1rem;
-            }
-
-            .slide {
-                flex: 0 0 100%;
-            }
-
-            .game-card img {
-                height: 200px;
-            }
-
-            .game-title {
-                font-size: 1.2rem;
+            
+            .section-padding {
+                padding: 60px 0;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Canvas Background -->
+    <div class="canvas-bg" id="particles"></div>
+
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#" style="color: var(--text-light);">
-                <img src="https://via.placeholder.com/50" alt="Dexps Solutions Logo" style="width: 50px;">
-                Dexps Solutions
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="#">Despx Solutions</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#amazon">Amazon</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#playstore">Play Store</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#privacy">Privacy</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#games">Games</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#team">Team</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section with Canvas -->
-    <section id="hero">
-        <canvas id="hero-canvas"></canvas>
-        <div class="hero-content">
-            <h1>Welcome to Dexps Solutions</h1>
-            <p>Creating innovative mobile games and apps for global audiences.</p>
-            <a href="#home" class="btn btn-primary btn-lg">Explore More</a>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <h1 class="hero-title">Crafting Immersive Gaming Experiences</h1>
+                    <p class="hero-subtitle">Despx Solutions creates captivating mobile games for millions of players worldwide. Explore our collection of innovative games available on Google Play and Amazon.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#games" class="btn btn-primary btn-lg">Explore Games</a>
+                        <a href="#about" class="btn btn-outline-light btn-lg">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block text-center">
+                    <div class="position-relative">
+                        <div class="position-absolute top-0 start-50 translate-middle-x" style="width: 300px; height: 300px; background: radial-gradient(circle, rgba(106, 17, 203, 0.4) 0%, rgba(37, 117, 252, 0) 70%); border-radius: 50%;"></div>
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" alt="Mobile Gaming" class="img-fluid rounded-4 shadow-lg" style="transform: perspective(1000px) rotateY(15deg);">
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <main>
-        <div class="tab-content">
-            <!-- Home Page -->
-            <div id="home" class="container tab-pane active">
-                <!-- Our Products -->
-                <section class="container py-5">
-                    <div class="text-center mb-5">
-                        <h1 class="stats-heading display-4">Our Products</h1>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 text-center mb-4">
-                            <img src="https://via.placeholder.com/200" class="img-fluid" alt="Play Store Product">
-                        </div>
-                        <div class="col-md-3 mb-4">
-                            <h3>Play Store</h3>
-                            <p>Explore our collection of exciting games available on Google Play Store.</p>
-                            <a href="https://play.google.com/store/apps/developer?id=Dexps+Solutions" target="_blank" class="btn btn-primary">Show more...</a>
-                        </div>
-                        <div class="col-md-3 text-center mb-4">
-                            <img src="https://via.placeholder.com/200" class="img-fluid" alt="Amazon Product">
-                        </div>
-                        <div class="col-md-3 mb-4">
-                            <h3>Amazon</h3>
-                            <p>Discover our apps and games on the Amazon Appstore.</p>
-                            <a href="https://www.amazon.com/s?i=mobile-apps&rh=p_4%3ADexps+Solutions" target="_blank" class="btn btn-primary">Show more...</a>
-                        </div>
-                    </div>
-                </section>
-                <hr>
-
-                <!-- Our Mission -->
-                <section class="container py-5">
-                    <h2 class="text-center stats-heading display-4">Our Mission</h2>
-                    <p>
-                        At Dexps Solutions, our mission is to create engaging and innovative mobile experiences that captivate users worldwide. We strive to blend creativity with cutting-edge technology to deliver games and apps that are both fun and impactful.
-                    </p>
-                </section>
-                <hr>
-
-                <!-- What We Do -->
-                <section class="container-fluid services py-5 mb-5">
-                    <div class="container">
-                        <div class="text-center pb-5">
-                            <h1 class="stats-heading display-4">What We Do</h1>
-                        </div>
+    <!-- Games Section -->
+    <section id="games" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">Our Games</h2>
+            <div class="games-tabs">
+                <ul class="nav nav-tabs" id="gamesTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="playstore-tab" data-bs-toggle="tab" data-bs-target="#playstore" type="button" role="tab">
+                            <i class="fab fa-google-play me-2"></i> Google Play Store
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="amazon-tab" data-bs-toggle="tab" data-bs-target="#amazon" type="button" role="tab">
+                            <i class="fab fa-amazon me-2"></i> Amazon Appstore
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content p-4" id="gamesTabContent">
+                    <div class="tab-pane fade show active" id="playstore" role="tabpanel">
                         <div class="row g-4">
-                            <div class="col-md-6 col-lg-4">
-                                <div class="services-item">
-                                    <div class="p-4 text-center services-content">
-                                        <div class="services-content-icon">
-                                            <i class="fa fa-code fa-4x mb-4"></i>
-                                            <h4 class="mb-3">Game UI/UX</h4>
-                                            <p class="mb-4">Designing intuitive and visually appealing user interfaces for immersive gaming experiences.</p>
-                                        </div>
+                            <div class="col-md-4">
+                                <div class="game-card">
+                                    <img src="https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" class="game-img" alt="Game 1">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Neon Dash Runner</h5>
+                                        <p class="text-muted">Action, Adventure</p>
+                                    </div>
+                                    <div class="game-overlay">
+                                        <h5>Neon Dash Runner</h5>
+                                        <p>Run through neon-lit worlds in this fast-paced adventure</p>
+                                        <a href="#" class="btn btn-primary">Download</a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="services-item">
-                                    <div class="p-4 text-center services-content">
-                                        <div class="services-content-icon">
-                                            <i class="fa fa-file-code fa-4x mb-4"></i>
-                                            <h4 class="mb-3">Development</h4>
-                                            <p class="mb-4">Building robust and scalable mobile applications using the latest technologies.</p>
-                                        </div>
+                            <div class="col-md-4">
+                                <div class="game-card">
+                                    <img src="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" class="game-img" alt="Game 2">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Magic Puzzle Quest</h5>
+                                        <p class="text-muted">Puzzle, Strategy</p>
+                                    </div>
+                                    <div class="game-overlay">
+                                        <h5>Magic Puzzle Quest</h5>
+                                        <p>Solve magical puzzles in this enchanting adventure</p>
+                                        <a href="#" class="btn btn-primary">Download</a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="services-item">
-                                    <div class="p-4 text-center services-content">
-                                        <div class="services-content-icon">
-                                            <i class="fa fa-external-link-alt fa-4x mb-4"></i>
-                                            <h4 class="mb-3">ASO</h4>
-                                            <p class="mb-4">Optimizing app store presence to increase visibility and downloads.</p>
-                                        </div>
+                            <div class="col-md-4">
+                                <div class="game-card">
+                                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" class="game-img" alt="Game 3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Galaxy Warriors</h5>
+                                        <p class="text-muted">Action, RPG</p>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="services-item">
-                                    <div class="p-4 text-center services-content">
-                                        <div class="services-content-icon">
-                                            <i class="fas fa-user-secret fa-4x mb-4"></i>
-                                            <h4 class="mb-3">Marketing</h4>
-                                            <p class="mb-4">Crafting strategic campaigns to promote our apps and engage users.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="services-item">
-                                    <div class="p-4 text-center services-content">
-                                        <div class="services-content-icon">
-                                            <i class="fa fa-envelope-open fa-4x mb-4"></i>
-                                            <h4 class="mb-3">Graphic Design</h4>
-                                            <p class="mb-4">Creating stunning visuals and graphics for games and apps.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="services-item">
-                                    <div class="p-4 text-center services-content">
-                                        <div class="services-content-icon">
-                                            <i class="fas fa-laptop fa-4x mb-4"></i>
-                                            <h4 class="mb-3">Game Level Design</h4>
-                                            <p class="mb-4">Crafting challenging and engaging levels for unforgettable gaming experiences.</p>
-                                        </div>
+                                    <div class="game-overlay">
+                                        <h5>Galaxy Warriors</h5>
+                                        <p>Battle across the galaxy in this epic space adventure</p>
+                                        <a href="#" class="btn btn-primary">Download</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
-                <hr>
-
-                <!-- Our Achievements -->
-                <section class="stats-section">
-                    <div class="container text-center">
-                        <h2 class="stats-heading display-4">Our Achievements</h2>
-                        <div class="row gy-4">
-                            <div class="col-lg-4 col-md-6">
-                                <div class="stat-box">
-                                    <div class="stat-number">8+ Years</div>
-                                    <div class="stat-label">Work Experience</div>
+                    <div class="tab-pane fade" id="amazon" role="tabpanel">
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="game-card">
+                                    <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" class="game-img" alt="Game 4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Desert Rally Racer</h5>
+                                        <p class="text-muted">Racing, Sports</p>
+                                    </div>
+                                    <div class="game-overlay">
+                                        <h5>Desert Rally Racer</h5>
+                                        <p>Race through challenging desert terrains</p>
+                                        <a href="#" class="btn btn-primary">Download</a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="stat-box">
-                                    <div class="stat-number">3B+</div>
-                                    <div class="stat-label">App Downloads</div>
+                            <div class="col-md-4">
+                                <div class="game-card">
+                                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" class="game-img" alt="Game 5">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Cyber Ninja</h5>
+                                        <p class="text-muted">Action, Stealth</p>
+                                    </div>
+                                    <div class="game-overlay">
+                                        <h5>Cyber Ninja</h5>
+                                        <p>Become a futuristic ninja in this cyberpunk world</p>
+                                        <a href="#" class="btn btn-primary">Download</a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="stat-box">
-                                    <div class="stat-number">1B+</div>
-                                    <div class="stat-label">Monthly Active Users</div>
+                            <div class="col-md-4">
+                                <div class="game-card">
+                                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" class="game-img" alt="Game 6">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Mystic Forest</h5>
+                                        <p class="text-muted">Adventure, Puzzle</p>
+                                    </div>
+                                    <div class="game-overlay">
+                                        <h5>Mystic Forest</h5>
+                                        <p>Explore enchanted forests and solve ancient mysteries</p>
+                                        <a href="#" class="btn btn-primary">Download</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Our People -->
-                <section id="team" class="team section py-5">
-                    <div class="container">
-                        <h2 class="stats-heading display-4 text-center">Our People</h2>
-                        <p class="text-center mb-5">
-                            Our talented team consists of game designers, developers, and sound engineers passionate about casual gaming. We work collaboratively to ensure each game is polished, fun, and addictive.
-                        </p>
-                        <div class="slider mt-3">
-                            <div class="slider-wrapper" id="slider-wrapper">
-                                <div class="slide">
-                                    <img src="https://via.placeholder.com/150" alt="Saad Pervez Khan">
-                                    <div class="slide-name">Saad Pervez Khan</div>
-                                    <div class="slide-designation">CEO & Founder</div>
-                                </div>
-                                <div class="slide">
-                                    <img src="https://via.placeholder.com/150" alt="Raja Faizan Mehmood">
-                                    <div class="slide-name">Raja Faizan Mehmood</div>
-                                    <div class="slide-designation">CEO & Founder</div>
-                                </div>
-                                <div class="slide">
-                                    <img src="https://via.placeholder.com/150" alt="Umar Ali Asgher">
-                                    <div class="slide-name">Umar Ali Asgher</div>
-                                    <div class="slide-designation">HR & Admin Manager</div>
-                                </div>
-                                <div class="slide">
-                                    <img src="https://via.placeholder.com/150" alt="Musa Ali">
-                                    <div class="slide-name">Musa Ali</div>
-                                    <div class="slide-designation">Team Lead</div>
-                                </div>
-                                <div class="slide">
-                                    <img src="https://via.placeholder.com/150" alt="M. Sajjad Khan">
-                                    <div class="slide-name">M. Sajjad Khan</div>
-                                    <div class="slide-designation">Senior Graphic Designer</div>
-                                </div>
-                                <div class="slide">
-                                    <img src="https://via.placeholder.com/150" alt="Wasif Shoaib">
-                                    <div class="slide-name">Wasif Shoaib</div>
-                                    <div class="slide-designation">Senior Unity Developer</div>
-                                </div>
-                                <div class="slide">
-                                    <img src="https://via.placeholder.com/150" alt="M. Abdullah">
-                                    <div class="slide-name">M. Abdullah</div>
-                                    <div class="slide-designation">Graphic Designer</div>
-                                </div>
-                                <div class="slide">
-                                    <img src="https://via.placeholder.com/150" alt="Mudasir Shafique">
-                                    <div class="slide-name">Mudasir Shafique</div>
-                                    <div class="slide-designation">Junior Unity Developer</div>
-                                </div>
-                            </div>
-                            <span class="prev" onclick="moveSlide(-1)">❮</span>
-                            <span class="next" onclick="moveSlide(1)">❯</span>
-                        </div>
-                    </div>
-                </section>
-                <hr>
-
-                <!-- Why Choose Us -->
-                <section class="profile-section text-center py-5">
-                    <div class="container">
-                        <h2 class="stats-heading display-4">Why Choose Us</h2>
-                        <div class="row justify-content-center">
-                            <div class="col-lg-3 col-md-4 profile-card">
-                                <img src="https://via.placeholder.com/150" alt="Quality">
-                                <p class="person-name">Quality</p>
-                                <p class="person-designation">We deliver high-quality games and apps with meticulous attention to detail.</p>
-                            </div>
-                            <div class="col-lg-3 col-md-4 profile-card">
-                                <img src="https://via.placeholder.com/150" alt="Personnel">
-                                <p class="person-name">Personnel</p>
-                                <p class="person-designation">Our skilled team brings expertise and passion to every project.</p>
-                            </div>
-                            <div class="col-lg-3 col-md-4 profile-card">
-                                <img src="https://via.placeholder.com/150" alt="Innovation">
-                                <p class="person-name">Innovation</p>
-                                <p class="person-designation">We push boundaries with creative and cutting-edge solutions.</p>
-                            </div>
-                            <div class="col-lg-3 col-md-4 profile-card">
-                                <img src="https://via.placeholder.com/150" alt="Commitment">
-                                <p class="person-name">Commitment</p>
-                                <p class="person-designation">We are dedicated to exceeding client and user expectations.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Amazon Games -->
-            <div id="amazon" class="container tab-pane fade">
-                <div class="container py-5">
-                    <h2 class="stats-heading display-4 text-center mb-5">Amazon Games</h2>
-                    <div class="row">
-                        <div class="col-md-2 mb-4">
-                            <div class="game-card">
-                                <img src="https://via.placeholder.com/200" alt="Ball Hop Neon Tiles">
-                                <div class="game-overlay">
-                                    <div class="game-title">Ball Hop Neon Tiles</div>
-                                    <a href="https://www.amazon.com/dp/B086S9T19Y" target="_blank" class="game-btn">
-                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-4">
-                            <div class="game-card">
-                                <img src="https://via.placeholder.com/200" alt="Magic Neon Switch Color">
-                                <div class="game-overlay">
-                                    <div class="game-title">Magic Neon Switch Color</div>
-                                    <a href="https://www.amazon.com/dp/B08JVFZLVH" target="_blank" class="game-btn">
-                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-4">
-                            <div class="game-card">
-                                <img src="https://via.placeholder.com/200" alt="Stack Ball">
-                                <div class="game-overlay">
-                                    <div class="game-title">Stack Ball - Helix Jump</div>
-                                    <a href="https://www.amazon.com/dp/B08KG3XC65" target="_blank" class="game-btn">
-                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-4">
-                            <div class="game-card">
-                                <img src="https://via.placeholder.com/200" alt="Magic Tiles Hop">
-                                <div class="game-overlay">
-                                    <div class="game-title">Magic Tiles Hop Twister</div>
-                                    <a href="https://www.amazon.com/dp/B08K8R6PLS" target="_blank" class="game-btn">
-                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-4">
-                            <div class="game-card">
-                                <img src="https://via.placeholder.com/200" alt="Line Color">
-                                <div class="game-overlay">
-                                    <div class="game-title">Line Color The Path</div>
-                                    <a href="https://www.amazon.com/dp/B08NPH1V61" target="_blank" class="game-btn">
-                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-4">
-                            <div class="game-card">
-                                <img src="https://via.placeholder.com/200" alt="Parking Jam">
-                                <div class="game-overlay">
-                                    <div class="game-title">Parking Jam 3D</div>
-                                    <a href="https://www.amazon.com/dp/B08KDVDD9V" target="_blank" class="game-btn">
-                                        <img src="https://via.placeholder.com/120x40" alt="Amazon Appstore">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Google Play Store Games -->
-            <div id="playstore" class="container tab-pane fade">
-                <div class="container py-5">
-                    <h2 class="stats-heading display-4 text-center mb-5">Google Play Games</h2>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <div class="game-card">
-                                <img src="https://via.placeholder.com/300" alt="Path Color Line">
-                                <div class="game-overlay">
-                                    <div class="game-title">Path Color Line 3D</div>
-                                    <a href="https://play.google.com/store/apps/details?id=com.dexpssolutions.linecolor.adventure.colour.draw.go.music" target="_blank" class="game-btn">
-                                        <img src="https://via.placeholder.com/120x40" alt="Google Play">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="game-card">
-                                <img src="https://via.placeholder.com/300" alt="Magic Tiles Twist">
-                                <div class="game-overlay">
-                                    <div class="game-title">Magic Tiles Twist</div>
-                                    <a href="https://play.google.com/store/apps/details?id=com.dexpssolutions.magic.tiles.twist" target="_blank" class="game-btn">
-                                        <img src="https://via.placeholder.com/120x40" alt="Google Play">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="game-card">
-                                <img src="https://via.placeholder.com/300" alt="Dancing Ball Hop">
-                                <div class="game-overlay">
-                                    <div class="game-title">Dancing Ball Hop</div>
-                                    <a href="https://play.google.com/store/apps/details?id=com.dexpssolutions.Jumper.colorhop.tiles.hop.edm.dancing.ball.rush.forever.music.magictiles" target="_blank" class="game-btn">
-                                        <img src="https://via.placeholder.com/120x40" alt="Google Play">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Privacy Policy -->
-            <div id="privacy" class="container tab-pane fade">
-                <div class="container py-5">
-                    <h2 class="stats-heading display-4">Privacy Policy</h2>
-                    <p>
-                        At Dexps Solutions, we are committed to protecting your privacy. This policy outlines how we collect, use, and safeguard your information when you use our apps and services. For details, please contact our support team.
-                    </p>
-                </div>
-            </div>
-
-            <!-- About Us -->
-            <div id="about" class="container tab-pane fade">
-                <div class="container py-5">
-                    <h2 class="stats-heading display-4">About Us</h2>
-                    <p>
-                        Dexps Solutions is a leading mobile app development company specializing in casual gaming. With a passionate team and innovative approach, we create apps that entertain millions worldwide.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Contact Us -->
-            <div id="contact" class="container tab-pane fade">
-                <div class="container py-5">
-                    <h2 class="stats-heading display-4 text-center mb-4">Contact Us</h2>
-                    <div class="row justify-content-center">
-                        <div class="col-md-8">
-                            <form id="contact-form">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name" placeholder="Your Name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" placeholder="Your Email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="subject" class="form-label">Subject</label>
-                                    <input type="text" class="form-control" id="subject" placeholder="Subject" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="message" class="form-label">Message</label>
-                                    <textarea class="form-control" id="message" rows="5" placeholder="Your Message" required></textarea>
-                                </div>
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">Send Message</button>
-                                </div>
-                            </form>
-                            <div id="form-message" class="mt-3"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section-padding bg-dark">
+        <div class="container">
+            <h2 class="section-title">Our Achievements</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="stats-box">
+                        <i class="fas fa-calendar-alt fa-3x mb-3" style="color: var(--accent);"></i>
+                        <div class="stat-number">8+ Years</div>
+                        <p class="mb-0">Game Development Experience</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-box">
+                        <i class="fas fa-download fa-3x mb-3" style="color: var(--accent);"></i>
+                        <div class="stat-number">3B+</div>
+                        <p class="mb-0">App Downloads</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-box">
+                        <i class="fas fa-users fa-3x mb-3" style="color: var(--accent);"></i>
+                        <div class="stat-number">1B+</div>
+                        <p class="mb-0">Monthly Active Users</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">Our Creative Team</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80" class="team-img" alt="Team Member">
+                        <h4>Alex Johnson</h4>
+                        <p class="text-muted">Lead Developer</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80" class="team-img" alt="Team Member">
+                        <h4>Sarah Williams</h4>
+                        <p class="text-muted">Art Director</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80" class="team-img" alt="Team Member">
+                        <h4>Michael Chen</h4>
+                        <p class="text-muted">Game Designer</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80" class="team-img" alt="Team Member">
+                        <h4>Emily Rodriguez</h4>
+                        <p class="text-muted">Marketing Director</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section-padding bg-dark">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <h4 class="mb-3">Contact Information</h4>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> 123 Game Street, Los Angeles, CA</p>
+                        <p><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</p>
+                        <p><i class="fas fa-envelope me-2"></i> info@despxsolutions.com</p>
+                    </div>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <form>
+                        <div class="mb-3">
+                            <input type="text" class="form-control bg-transparent text-light" placeholder="Your Name" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control bg-transparent text-light" placeholder="Your Email" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control bg-transparent text-light" placeholder="Subject">
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control bg-transparent text-light" rows="5" placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container text-center">
-            <p>&copy; 2025 Dexps Solutions. All rights reserved.</p>
-            <p>
-                <a href="#privacy">Privacy Policy</a> | 
-                <a href="#contact">Contact Us</a> | 
-                <a href="https://play.google.com/store/apps/developer?id=Dexps+Solutions" target="_blank">Google Play</a> | 
-                <a href="https://www.amazon.com/s?i=mobile-apps&rh=p_4%3ADexps+Solutions" target="_blank">Amazon Appstore</a>
-            </p>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="footer-logo">Despx Solutions</div>
+                    <p>Creating innovative gaming experiences for mobile platforms since 2015.</p>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#home" class="text-light text-decoration-none">Home</a></li>
+                        <li><a href="#games" class="text-light text-decoration-none">Games</a></li>
+                        <li><a href="#about" class="text-light text-decoration-none">About</a></li>
+                        <li><a href="#team" class="text-light text-decoration-none">Team</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Our Platforms</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none"><i class="fab fa-google-play me-2"></i> Google Play</a></li>
+                        <li><a href="#" class="text-light text-decoration-none"><i class="fab fa-apple me-2"></i> App Store</a></li>
+                        <li><a href="#" class="text-light text-decoration-none"><i class="fab fa-amazon me-2"></i> Amazon</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="mt-0 mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2023 Despx Solutions. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Designed with <i class="fas fa-heart text-danger"></i> for gamers</p>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Canvas Particle Animation
-        const canvas = document.getElementById('hero-canvas');
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const particles = [];
-        const particleCount = 100;
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 5 + 1;
-                this.speedX = Math.random() * 3 - 1.5;
-                this.speedY = Math.random() * 3 - 1.5;
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.size > 0.2) this.size -= 0.1;
-
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-
-            draw() {
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((particle, index) => {
-                particle.update();
-                particle.draw();
-
-                if (particle.size <= 0.2) {
-                    particles.splice(index, 1);
-                    particles.push(new Particle());
-                }
-            });
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-        animateParticles();
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // GSAP Animations
-        gsap.from('.hero-content', { duration: 1.5, y: 50, opacity: 0, ease: 'power3.out' });
-        gsap.from('.stats-heading', {
-            scrollTrigger: '.stats-heading',
-            duration: 1,
-            y: 30,
-            opacity: 0,
-            stagger: 0.2,
-            ease: 'power2.out'
-        });
-        gsap.from('.services-item', {
-            scrollTrigger: '.services-item',
+        // Initialize GSAP animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Animate hero elements
+        gsap.from(".hero-title", {
             duration: 1,
             y: 50,
             opacity: 0,
-            stagger: 0.2,
-            ease: 'power2.out'
+            ease: "power3.out"
         });
-        gsap.from('.stat-box', {
-            scrollTrigger: '.stat-box',
+        
+        gsap.from(".hero-subtitle", {
             duration: 1,
-            scale: 0.8,
+            y: 30,
+            opacity: 0,
+            delay: 0.3,
+            ease: "power3.out"
+        });
+        
+        gsap.from(".btn", {
+            duration: 1,
+            y: 30,
+            opacity: 0,
+            delay: 0.6,
+            stagger: 0.1,
+            ease: "power3.out"
+        });
+        
+        // Animate section titles
+        gsap.utils.toArray(".section-title").forEach(title => {
+            gsap.from(title, {
+                scrollTrigger: {
+                    trigger: title,
+                    start: "top 80%"
+                },
+                duration: 0.8,
+                y: 30,
+                opacity: 0,
+                ease: "power2.out"
+            });
+        });
+        
+        // Animate game cards
+        gsap.utils.toAll(".game-card", {
+            scrollTrigger: {
+                trigger: "#games",
+                start: "top 80%"
+            },
+            duration: 0.6,
+            y: 40,
+            opacity: 0,
+            stagger: 0.15,
+            ease: "power2.out"
+        });
+        
+        // Animate stats boxes
+        gsap.utils.toAll(".stats-box", {
+            scrollTrigger: {
+                trigger: ".bg-dark",
+                start: "top 80%"
+            },
+            duration: 0.8,
+            y: 40,
             opacity: 0,
             stagger: 0.2,
-            ease: 'back.out(1.7)'
+            ease: "power2.out"
         });
-
-        // Team Slider
-        let slideIndex = 0;
-        const sliderWrapper = document.getElementById('slider-wrapper');
-        const slides = sliderWrapper.children;
-        const totalSlides = slides.length;
-        const slidesToShow = 4;
-
-        function moveSlide(n) {
-            slideIndex += n;
-
-            if (slideIndex >= totalSlides - slidesToShow + 1) {
-                slideIndex = 0;
-            } else if (slideIndex < 0) {
-                slideIndex = totalSlides - slidesToShow;
+        
+        // Animate team members
+        gsap.utils.toAll(".team-member", {
+            scrollTrigger: {
+                trigger: "#team",
+                start: "top 80%"
+            },
+            duration: 0.8,
+            y: 40,
+            opacity: 0,
+            stagger: 0.15,
+            ease: "power2.out"
+        });
+        
+        // Create particle background
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size, position and color
+                const size = Math.random() * 10 + 5;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const hue = Math.floor(Math.random() * 360);
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.background = `hsla(${hue}, 70%, 60%, ${Math.random() * 0.5 + 0.2})`;
+                particle.style.boxShadow = `0 0 ${size}px hsla(${hue}, 70%, 60%, 0.5)`;
+                
+                container.appendChild(particle);
+                
+                // Animate the particle
+                gsap.to(particle, {
+                    x: `+=${(Math.random() - 0.5) * 100}`,
+                    y: `+=${(Math.random() - 0.5) * 100}`,
+                    duration: Math.random() * 10 + 10,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
             }
-
-            gsap.to(sliderWrapper, {
-                x: -(slideIndex * (slides[0].offsetWidth + 20)),
-                duration: 0.5,
-                ease: 'power2.out'
-            });
         }
-
-        // Auto Slide
-        setInterval(() => moveSlide(1), 5000);
-
-        // Navigation Active State
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-
-                const target = link.getAttribute('href').substring(1);
-                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-                document.getElementById(target).classList.add('active');
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
             });
-        });
-
-        // Contact Form Submission
-        document.getElementById('contact-form').addEventListener('submit', e => {
-            e.preventDefault();
-            const messageDiv = document.getElementById('form-message');
-            messageDiv.innerHTML = '<div class="alert alert-success">Message sent successfully! (Demo)</div>';
-            e.target.reset();
-            setTimeout(() => messageDiv.innerHTML = '', 3000);
         });
     </script>
 </body>

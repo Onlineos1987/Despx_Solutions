@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despx Solutions | Gaming Studio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff3e78;
+            --dark: #0f172a;
+            --light: #f8f9fa;
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00c8;
+            --space-purple: #4d1a7f;
+            --space-blue: #0a1a2a;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--space-blue), var(--space-purple));
+            color: #e2e8f0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            perspective: 1000px;
+        }
+
+        .game-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 30, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            position: relative;
+            padding: 8px 15px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::before, .nav-links a.active::before {
+            width: 100%;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+            padding-top: 120px;
+        }
+
+        .hero-content {
+            max-width: 650px;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, var(--neon-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.1;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            color: #cbd5e1;
+            max-width: 600px;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 25px rgba(37, 117, 252, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(37, 117, 252, 0.8);
+        }
+
+        .hero-game-container {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            max-width: 700px;
+            z-index: 5;
+            filter: drop-shadow(0 0 30px rgba(0, 243, 255, 0.5));
+            border: 3px solid var(--neon-blue);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.3);
+        }
+
+        #heroGame {
+            width: 100%;
+            height: 400px;
+            background: rgba(5, 5, 15, 0.9);
+            display: block;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(20, 20, 40, 0.8);
+            padding: 10px 20px;
+            border-top: 2px solid var(--neon-blue);
+        }
+
+        .game-stats {
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            padding: 150px 5%;
+            position: relative;
+            background: rgba(10, 10, 25, 0.7);
+            backdrop-filter: blur(5px);
+            border-top: 1px solid rgba(0, 243, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 80px;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 5px;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            border-radius: 3px;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .games-tabs {
+            background: rgba(15, 15, 35, 0.6);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-width: 1400px;
+            margin: 0 auto;
+            transform-style: preserve-3d;
+        }
+
+        .tabs-header {
+            display: flex;
+            background: rgba(20, 20, 50, 0.8);
+            border-bottom: 2px solid var(--neon-blue);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: transparent;
+            border: none;
+            color: #a0aec0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .tab-btn.active {
+            color: white;
+            background: linear-gradient(to right, rgba(0, 243, 255, 0.2), rgba(255, 0, 200, 0.2));
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .tabs-content {
+            padding: 50px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .game-card {
+            background: rgba(30, 30, 60, 0.7);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            position: relative;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink), var(--neon-blue));
+            z-index: -1;
+            border-radius: 22px;
+            animation: borderAnimation 3s linear infinite;
+            background-size: 400%;
+        }
+
+        @keyframes borderAnimation {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+
+        .game-card:hover {
+            transform: translateY(-15px) rotateX(5deg) rotateY(5deg) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border-color: rgba(0, 243, 255, 0.7);
+        }
+
+        .game-img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            border-bottom: 2px solid var(--neon-blue);
+        }
+
+        .game-card:hover .game-img {
+            transform: scale(1.05);
+        }
+
+        .game-info {
+            padding: 25px;
+        }
+
+        .game-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .game-category {
+            color: var(--neon-blue);
+            margin-bottom: 20px;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        .store-badge {
+            display: inline-block;
+            padding: 10px 25px;
+            background: rgba(0, 243, 255, 0.1);
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .store-badge:hover {
+            background: rgba(0, 243, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: rgba(20, 20, 50, 0.6);
+            border-radius: 20px;
+            padding: 50px 30px;
+            text-align: center;
+            transition: all 0.5s ease;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            background: rgba(20, 20, 50, 0.8);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: var(--neon-pink);
+        }
+
+        .stat-icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 20px 0;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .stat-text {
+            font-size: 1.4rem;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 50px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .team-member {
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        .member-card {
+            background: rgba(30, 30, 60, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.6s ease;
+            transform-style: preserve-3d;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: 0.5s;
+        }
+
+        .member-card:hover::before {
+            animation: borderLight 2s linear infinite;
+        }
+
+        @keyframes borderLight {
+            0% { transform: rotate(45deg) translateX(-50%); }
+            100% { transform: rotate(45deg) translateX(50%); }
+        }
+
+        .team-member:hover .member-card {
+            transform: translateY(-20px) rotateY(10deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: var(--neon-pink);
+        }
+
+        .member-img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.5);
+            margin: 0 auto 25px;
+            transition: all 0.5s ease;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            padding: 4px;
+        }
+
+        .team-member:hover .member-img {
+            transform: scale(1.1);
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 40px rgba(255, 0, 200, 0.7);
+        }
+
+        .member-name {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .member-role {
+            color: var(--neon-blue);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            background: rgba(10, 10, 30, 0.9);
+            padding: 80px 5% 40px;
+            border-top: 2px solid var(--neon-blue);
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 50px;
+        }
+
+        .footer-logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+        }
+
+        .footer-text {
+            color: #94a3b8;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: rgba(0, 243, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--neon-blue);
+        }
+
+        .social-icon:hover {
+            background: rgba(0, 243, 255, 0.3);
+            transform: translateY(-5px) rotate(10deg);
+            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.4);
+            color: var(--neon-pink);
+        }
+
+        .footer-title {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 20px;
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .footer-links li:hover {
+            transform: translateX(10px);
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
+        .footer-links a i {
+            color: var(--neon-blue);
+            transition: transform 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-links a:hover i {
+            transform: translateX(5px);
+            color: var(--neon-pink);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 60px;
+            color: #94a3b8;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
+            font-size: 1.1rem;
+        }
+
+        .game-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(20, 20, 50, 0.9);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border-left: 4px solid var(--neon-blue);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transform: translateX(120%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .game-notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-title {
+            color: var(--neon-blue);
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .notification-text {
+            color: #cbd5e1;
+        }
+
+        .mobile-game-warning {
+            display: none;
+            background: rgba(255, 50, 50, 0.8);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            border-bottom: 2px solid red;
+        }
+
+        @media (max-width: 1200px) {
+            .hero-game-container {
+                width: 50%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            
+            .hero-game-container {
+                display: none;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+                text-align: center;
+                margin: 0 auto;
+            }
+            
+            .hero-subtitle {
+                margin: 0 auto 40px;
+            }
+            
+            .section-title {
+                font-size: 2.8rem;
+            }
+
+            .mobile-game-warning {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .tabs-header {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                padding: 20px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas for Game Background -->
+    <canvas class="game-background" id="gameCanvas"></canvas>
+    
+    <!-- Mobile Warning -->
+    <div class="mobile-game-warning">
+        <i class="fas fa-gamepad"></i> Game controls are optimized for desktop. Visit on a larger screen for the full experience!
+    </div>
+    
+    <!-- Game Notification -->
+    <div class="game-notification" id="notification">
+        <div class="notification-title">NEW GAME RELEASED!</div>
+        <div class="notification-text">Galactic Warriors now available on Play Store</div>
+    </div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">DESPX SOLUTIONS</div>
+        <nav class="nav-links">
+            <a href="#home" class="active">Home</a>
+            <a href="#games">Games</a>
+            <a href="#stats">Achievements</a>
+            <a href="#team">Team</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+    
+    <!-- Hero Section with Playable Game -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">LEVEL UP YOUR GAMING EXPERIENCE</h1>
+            <p class="hero-subtitle">Play our interactive space shooter while exploring Despx Solutions' gaming portfolio. Control with mouse movement and clicks!</p>
+            <div class="hero-buttons">
+                <a href="#games" class="btn">Explore Games</a>
+                <a href="#" class="btn" style="background: linear-gradient(to right, var(--neon-pink), var(--accent));">Play Full Game</a>
+            </div>
+        </div>
+        <div class="hero-game-container">
+            <canvas id="heroGame" width="600" height="400"></canvas>
+            <div class="game-controls">
+                <div class="game-stats">SCORE: <span id="score">0</span></div>
+                <div class="game-stats">HEALTH: <span id="health">100</span>%</div>
+                <div class="game-stats">LEVEL: <span id="level">1</span></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Games Section -->
+    <section class="section" id="games">
+        <h2 class="section-title">OUR GAMES</h2>
+        <div class="games-tabs">
+            <div class="tabs-header">
+                <button class="tab-btn active" data-tab="playstore">
+                    <i class="fab fa-google-play"></i> Google Play
+                </button>
+                <button class="tab-btn" data-tab="amazon">
+                    <i class="fab fa-amazon"></i> Amazon
+                </button>
+            </div>
+            <div class="tabs-content">
+                <div class="tab-pane active" id="playstore-content">
+                    <div class="games-grid">
+                        <div class="game-card">
+                            <img src="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="game-img" alt="Neon Dash">
+                            <div class="game-info">
+                                <h3 class="game-title">Neon Dash Runner</h3>
+                                <span class="game-category">Action, Adventure</span>
+                                <a href="#" class="store-badge">Download on Play Store</a>
+                            </div>
+                        </div>
+                        <div class="game-card">
+                            <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="game-img" alt="Magic Puzzle">
+                            <div class="game-info">
+                                <h3 class="game-title">Magic Puzzle Quest</h3>
+                                <span class="game-category">Puzzle, Strategy</span>
+                                <a href="#" class="store-badge">Download on Play Store</a>
+                            </div>
+                        </div>
+                        <div class="game-card">
+                            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="game-img" alt="Galaxy Warriors">
+                            <div class="game-info">
+                                <h3 class="game-title">Galaxy Warriors</h3>
+                                <span class="game-category">Action, RPG</span>
+                                <a href="#" class="store-badge">Download on Play Store</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="amazon-content">
+                    <div class="games-grid">
+                        <div class="game-card">
+                            <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="game-img" alt="Desert Rally">
+                            <div class="game-info">
+                                <h3 class="game-title">Desert Rally Racer</h3>
+                                <span class="game-category">Racing, Sports</span>
+                                <a href="#" class="store-badge">Download on Amazon</a>
+                            </div>
+                        </div>
+                        <div class="game-card">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="game-img" alt="Cyber Ninja">
+                            <div class="game-info">
+                                <h3 class="game-title">Cyber Ninja</h3>
+                                <span class="game-category">Action, Stealth</span>
+                                <a href="#" class="store-badge">Download on Amazon</a>
+                            </div>
+                        </div>
+                        <div class="game-card">
+                            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="game-img" alt="Mystic Forest">
+                            <div class="game-info">
+                                <h3 class="game-title">Mystic Forest</h3>
+                                <span class="game-category">Adventure, Puzzle</span>
+                                <a href="#" class="store-badge">Download on Amazon</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="section" id="stats">
+        <h2 class="section-title">OUR ACHIEVEMENTS</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🎮</div>
+                <div class="stat-number">8+</div>
+                <div class="stat-text">Years in Gaming</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📥</div>
+                <div class="stat-number">3B+</div>
+                <div class="stat-text">Downloads</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-number">1B+</div>
+                <div class="stat-text">Active Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🌟</div>
+                <div class="stat-number">50+</div>
+                <div class="stat-text">Games Created</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Section -->
+    <section class="section" id="team">
+        <h2 class="section-title">GAME CREATORS</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="member-card">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" class="member-img" alt="Alex Johnson">
+                    <h3 class="member-name">Alex Johnson</h3>
+                    <p class="member-role">Lead Developer</p>
+                </div>
+            </div>
+            <div class="team-member">
+                <div class="member-card">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" class="member-img" alt="Sarah Williams">
+                    <h3 class="member-name">Sarah Williams</h3>
+                    <p class="member-role">Art Director</p>
+                </div>
+            </div>
+            <div class="team-member">
+                <div class="member-card">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" class="member-img" alt="Michael Chen">
+                    <h3 class="member-name">Michael Chen</h3>
+                    <p class="member-role">Game Designer</p>
+                </div>
+            </div>
+            <div class="team-member">
+                <div class="member-card">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" class="member-img" alt="Emily Rodriguez">
+                    <h3 class="member-name">Emily Rodriguez</h3>
+                    <p class="member-role">Marketing Director</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <div class="footer-info">
+                <div class="footer-logo">DESPX SOLUTIONS</div>
+                <p class="footer-text">Creating innovative gaming experiences for mobile platforms since 2015. Our passion is to deliver fun, engaging games to players worldwide.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h3 class="footer-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home"><i class="fas fa-gamepad"></i> Home</a></li>
+                    <li><a href="#games"><i class="fas fa-dice"></i> Games</a></li>
+                    <li><a href="#stats"><i class="fas fa-trophy"></i> Achievements</a></li>
+                    <li><a href="#team"><i class="fas fa-users"></i> Team</a></li>
+                    <li><a href="#contact"><i class="fas fa-envelope"></i> Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3 class="footer-title">Our Platforms</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fab fa-google-play"></i> Google Play</a></li>
+                    <li><a href="#"><i class="fab fa-apple"></i> App Store</a></li>
+                    <li><a href="#"><i class="fab fa-amazon"></i> Amazon</a></li>
+                    <li><a href="#"><i class="fab fa-windows"></i> Microsoft Store</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3 class="footer-title">Contact Us</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Game Street, Los Angeles, CA</li>
+                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> info@despxsolutions.com</li>
+                    <li><i class="fas fa-globe"></i> www.despxsolutions.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Despx Solutions. All rights reserved. | Designed for Gamers</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize GSAP
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Create particle background
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const particles = [];
+        const particleCount = 150;
+        
+        // Particle class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+                this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                this.alpha = Math.random() * 0.5 + 0.1;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x > canvas.width || this.x < 0) {
+                    this.speedX = -this.speedX;
+                }
+                
+                if (this.y > canvas.height || this.y < 0) {
+                    this.speedY = -this.speedY;
+                }
+            }
+            
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        // Create particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+        
+        // Animation loop
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                // Connect particles
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `hsla(${(particles[i].color.split('(')[1].split(')')[0])}, 70%, 60%, ${0.1 * (1 - distance/100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            requestAnimationFrame(animateParticles);
+        }
+        
+        // Create playable game in hero section
+        const gameCanvas = document.getElementById('heroGame');
+        const gameCtx = gameCanvas.getContext('2d');
+        
+        // Game elements
+        const player = {
+            x: gameCanvas.width / 2,
+            y: gameCanvas.height - 60,
+            width: 50,
+            height: 30,
+            speed: 8,
+            color: '#00f3ff',
+            isMovingLeft: false,
+            isMovingRight: false
+        };
+        
+        const enemies = [];
+        const bullets = [];
+        const stars = [];
+        let score = 0;
+        let health = 100;
+        let level = 1;
+        let gameFrame = 0;
+        let enemySpawnRate = 60; // frames between enemy spawns
+        
+        // Create stars for background
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * gameCanvas.width,
+                y: Math.random() * gameCanvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 0.5 + 0.1
+            });
+        }
+        
+        // Create enemies
+        function createEnemy() {
+            const enemy = {
+                x: Math.random() * gameCanvas.width,
+                y: -30,
+                width: 30,
+                height: 30,
+                speed: Math.random() * 2 + 1,
+                color: `hsl(${Math.random() * 360}, 70%, 60%)`
+            };
+            enemies.push(enemy);
+        }
+        
+        // Draw player ship
+        function drawPlayer() {
+            gameCtx.fillStyle = player.color;
+            gameCtx.beginPath();
+            gameCtx.moveTo(player.x, player.y);
+            gameCtx.lineTo(player.x - player.width/2, player.y + player.height);
+            gameCtx.lineTo(player.x + player.width/2, player.y + player.height);
+            gameCtx.closePath();
+            gameCtx.fill();
+            
+            // Add glow
+            gameCtx.shadowColor = player.color;
+            gameCtx.shadowBlur = 20;
+            gameCtx.fill();
+            gameCtx.shadowBlur = 0;
+        }
+        
+        // Draw enemies
+        function drawEnemies() {
+            enemies.forEach((enemy, index) => {
+                gameCtx.fillStyle = enemy.color;
+                gameCtx.beginPath();
+                gameCtx.arc(enemy.x, enemy.y, enemy.width/2, 0, Math.PI * 2);
+                gameCtx.fill();
+                
+                // Add glow
+                gameCtx.shadowColor = enemy.color;
+                gameCtx.shadowBlur = 15;
+                gameCtx.fill();
+                gameCtx.shadowBlur = 0;
+                
+                // Move enemies
+                enemy.y += enemy.speed;
+                
+                // Check collision with player
+                const dx = player.x - enemy.x;
+                const dy = player.y - enemy.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < player.width/2 + enemy.width/2) {
+                    health -= 10;
+                    enemies.splice(index, 1);
+                    updateStats();
+                    
+                    // Create explosion
+                    for (let i = 0; i < 20; i++) {
+                        gameCtx.fillStyle = enemy.color;
+                        gameCtx.beginPath();
+                        gameCtx.arc(enemy.x, enemy.y, Math.random() * 15, 0, Math.PI * 2);
+                        gameCtx.fill();
+                    }
+                }
+                
+                // Remove enemies that go off screen
+                if (enemy.y > gameCanvas.height + 30) {
+                    enemies.splice(index, 1);
+                }
+            });
+        }
+        
+        // Draw bullets
+        function drawBullets() {
+            bullets.forEach((bullet, index) => {
+                gameCtx.fillStyle = '#ff00c8';
+                gameCtx.beginPath();
+                gameCtx.arc(bullet.x, bullet.y, 4, 0, Math.PI * 2);
+                gameCtx.fill();
+                
+                // Add glow
+                gameCtx.shadowColor = '#ff00c8';
+                gameCtx.shadowBlur = 10;
+                gameCtx.fill();
+                gameCtx.shadowBlur = 0;
+                
+                // Move bullets
+                bullet.y -= 5;
+                
+                // Remove bullets that go off screen
+                if (bullet.y < 0) {
+                    bullets.splice(index, 1);
+                }
+            });
+        }
+        
+        // Draw stars
+        function drawStars() {
+            gameCtx.fillStyle = 'white';
+            stars.forEach(star => {
+                gameCtx.beginPath();
+                gameCtx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                gameCtx.fill();
+                
+                // Move stars
+                star.y += star.speed;
+                if (star.y > gameCanvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * gameCanvas.width;
+                }
+            });
+        }
+        
+        // Check bullet collisions
+        function checkCollisions() {
+            bullets.forEach((bullet, bIndex) => {
+                enemies.forEach((enemy, eIndex) => {
+                    const dx = bullet.x - enemy.x;
+                    const dy = bullet.y - enemy.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < enemy.width/2 + 4) {
+                        // Create explosion
+                        for (let i = 0; i < 10; i++) {
+                            gameCtx.fillStyle = enemy.color;
+                            gameCtx.beginPath();
+                            gameCtx.arc(enemy.x, enemy.y, Math.random() * 10, 0, Math.PI * 2);
+                            gameCtx.fill();
+                        }
+                        
+                        // Remove enemy and bullet
+                        enemies.splice(eIndex, 1);
+                        bullets.splice(bIndex, 1);
+                        score += 10;
+                        
+                        // Level up every 100 points
+                        if (score % 100 === 0) {
+                            level++;
+                            enemySpawnRate = Math.max(20, enemySpawnRate - 5);
+                        }
+                        
+                        updateStats();
+                    }
+                });
+            });
+        }
+        
+        // Update game stats display
+        function updateStats() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('health').textContent = health;
+            document.getElementById('level').textContent = level;
+        }
+        
+        // Game loop
+        function gameLoop() {
+            gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+            
+            // Draw starry background
+            gameCtx.fillStyle = 'rgba(5, 5, 15, 0.5)';
+            gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+            
+            // Draw stars
+            drawStars();
+            
+            // Draw game elements
+            drawPlayer();
+            drawEnemies();
+            drawBullets();
+            checkCollisions();
+            
+            // Move player
+            if (player.isMovingLeft) player.x = Math.max(player.width/2, player.x - player.speed);
+            if (player.isMovingRight) player.x = Math.min(gameCanvas.width - player.width/2, player.x + player.speed);
+            
+            // Create enemies periodically
+            if (gameFrame % enemySpawnRate === 0) {
+                createEnemy();
+            }
+            
+            // Game over condition
+            if (health <= 0) {
+                gameCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+                
+                gameCtx.fillStyle = '#ff3e78';
+                gameCtx.font = 'bold 40px Orbitron';
+                gameCtx.textAlign = 'center';
+                gameCtx.fillText('GAME OVER', gameCanvas.width/2, gameCanvas.height/2 - 30);
+                
+                gameCtx.fillStyle = '#00f3ff';
+                gameCtx.font = '30px Orbitron';
+                gameCtx.fillText(`FINAL SCORE: ${score}`, gameCanvas.width/2, gameCanvas.height/2 + 30);
+                
+                gameCtx.fillStyle = 'white';
+                gameCtx.font = '20px Orbitron';
+                gameCtx.fillText('Click to restart', gameCanvas.width/2, gameCanvas.height/2 + 80);
+                
+                // Restart on click
+                gameCanvas.onclick = () => {
+                    health = 100;
+                    score = 0;
+                    level = 1;
+                    enemies.length = 0;
+                    bullets.length = 0;
+                    enemySpawnRate = 60;
+                    gameCanvas.onclick = shoot;
+                    updateStats();
+                };
+            } else {
+                gameFrame++;
+                requestAnimationFrame(gameLoop);
+            }
+        }
+        
+        // Player shooting
+        function shoot() {
+            bullets.push({
+                x: player.x,
+                y: player.y,
+                width: 4,
+                height: 10
+            });
+        }
+        
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') player.isMovingLeft = true;
+            if (e.key === 'ArrowRight') player.isMovingRight = true;
+            if (e.key === ' ') shoot();
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft') player.isMovingLeft = false;
+            if (e.key === 'ArrowRight') player.isMovingRight = false;
+        });
+        
+        // Mouse controls
+        gameCanvas.addEventListener('mousemove', (e) => {
+            const rect = gameCanvas.getBoundingClientRect();
+            player.x = e.clientX - rect.left;
+        });
+        
+        gameCanvas.addEventListener('click', shoot);
+        
+        // Handle tab switching
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Hide all tab panes
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.remove('active');
+                });
+                
+                // Show selected tab pane
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+            });
+        });
+        
+        // Show notification
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+        
+        // GSAP animations
+        gsap.from('.hero-title', {
+            duration: 1.5,
+            y: 50,
+            opacity: 0,
+            ease: 'power3.out',
+            delay: 0.3
+        });
+        
+        gsap.from('.hero-subtitle', {
+            duration: 1.5,
+            y: 30,
+            opacity: 0,
+            delay: 0.6,
+            ease: 'power3.out'
+        });
+        
+        gsap.from('.btn', {
+            duration: 1.5,
+            y: 30,
+            opacity: 0,
+            delay: 0.9,
+            ease: 'power3.out'
+        });
+        
+        // Animate game cards on scroll
+        gsap.utils.toArray('.game-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.2,
+                rotationY: -20
+            });
+        });
+        
+        // Start animations
+        window.addEventListener('load', () => {
+            animateParticles();
+            gameLoop();
+            showNotification();
+            updateStats();
+            
+            // Resize canvas on window resize
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                gameCanvas.width = gameCanvas.offsetWidth;
+            });
+        });
+    </script>
+</body>
+</html>
